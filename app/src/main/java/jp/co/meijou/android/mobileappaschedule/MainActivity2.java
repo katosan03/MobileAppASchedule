@@ -19,7 +19,21 @@ public class MainActivity2 extends AppCompatActivity {
         binding = ActivityMain2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         prefDataStore = prefDataStore.getInstance(this);
+
+        //すでにデータがあれば記載
+        prefDataStore.getString("time1")
+                .ifPresent(name -> binding.texttime1.setText(name));
+
+        prefDataStore.getString("naiyou1")
+                .ifPresent(name -> binding.textnaiyou1.setText(name));
+
+        //プラスボタンを押した場合（予定を追加する）
+        binding.buttonPlus.setOnClickListener(view ->{
+
+        });
+
     }
+
 
 
 }
