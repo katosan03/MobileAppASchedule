@@ -4,13 +4,19 @@ package jp.co.meijou.android.mobileappaschedule;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 
 public class MainActivity3 extends AppCompatActivity {
 
+    //private ActivityMain3Binding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main3);
+        //binding = ActivityMain3Binding.inflate(getLayoutInflater());
+        //setContentView(binding.getRoot());
+
+
     }
 }
