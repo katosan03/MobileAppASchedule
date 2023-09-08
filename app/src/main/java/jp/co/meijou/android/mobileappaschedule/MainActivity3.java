@@ -25,14 +25,14 @@ public class MainActivity3 extends AppCompatActivity {
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        dataStore.getString("day")
-                .ifPresent(day -> binding.day.setText(day));
 
 
         //Optional.ofNullable(getIntent().getStringExtra("day"))
           //      .ifPresent(day -> binding.day.setText(day));
 
         dataStore = PrefDataStore.getInstance(this); //Contextの準備が出来る onCreate() で prefDataStore を初期化.
+        dataStore.getString("day")
+                .ifPresent(day -> binding.day.setText(day));
 
 
         binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
