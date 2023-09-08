@@ -16,6 +16,7 @@ import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private PrefDataStore dataStore;
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -45,14 +46,22 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        /*
+
+
         binding.button1.setOnClickListener(view ->{
             var intent = new Intent(this, MainActivity2.class);
-            intent.putExtra("text", binding.button1.getText().toString());
+            //intent.putExtra("text", binding.button1.getText().toString());
+            var day = binding.button1.getText().toString();
+            dataStore.setString("day", day);
+            /*
+
+            dataStore.getString("time1")
+                    .ifPresent(time -> binding.);
+             */
             startActivity(intent);
         });
 
-         */
+
 
 
     }
