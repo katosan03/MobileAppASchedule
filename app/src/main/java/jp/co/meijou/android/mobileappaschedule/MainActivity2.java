@@ -4,6 +4,7 @@ package jp.co.meijou.android.mobileappaschedule;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
@@ -29,9 +30,15 @@ public class MainActivity2 extends AppCompatActivity {
 
         //プラスボタンを押した場合（予定を追加する）
         binding.buttonPlus.setOnClickListener(view ->{
-
+            var intent = new Intent(this, MainActivity2.class);
+            startActivity(intent);
         });
 
+        //戻るボタンを押した場合（MainActivityに戻る）
+        binding.buttonReturn.setOnClickListener(view ->{
+            var intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        });
     }
 
 
