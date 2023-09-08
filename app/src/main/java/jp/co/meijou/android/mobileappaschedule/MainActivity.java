@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             dataStore.getString("time1")
                     .ifPresent(time -> binding.);
              */
+
             startActivity(intent);
         });
 
