@@ -32,7 +32,7 @@ public class MainActivity3 extends AppCompatActivity {
         //Optional.ofNullable(getIntent().getStringExtra("day"))
           //      .ifPresent(day -> binding.day.setText(day));
 
-        dataStore = PrefDataStore.getInstance(this); //Contextの準備が出来る onCreate() で prefDataStore を初期化
+        dataStore = PrefDataStore.getInstance(this); //Contextの準備が出来る onCreate() で prefDataStore を初期化.
 
 
         binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
