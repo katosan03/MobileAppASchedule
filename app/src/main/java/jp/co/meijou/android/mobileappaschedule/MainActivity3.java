@@ -25,8 +25,12 @@ public class MainActivity3 extends AppCompatActivity {
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Optional.ofNullable(getIntent().getStringExtra("day"))
+        dataStore.getString("day1")
                 .ifPresent(day -> binding.day.setText(day));
+
+
+        //Optional.ofNullable(getIntent().getStringExtra("day"))
+          //      .ifPresent(day -> binding.day.setText(day));
 
         dataStore = PrefDataStore.getInstance(this); //Contextの準備が出来る onCreate() で prefDataStore を初期化
 
@@ -43,10 +47,7 @@ public class MainActivity3 extends AppCompatActivity {
             var schedule = binding.edittime.getText().toString();
             dataStore.setString("time1", time);
             dataStore.setString("naiyou1", schedule);
-
-
             startActivity(intent);
-
         });
 
 
