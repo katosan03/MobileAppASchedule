@@ -25,7 +25,7 @@ public class MainActivity3 extends AppCompatActivity {
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        dataStore.getString("day1")
+        dataStore.getString("day")
                 .ifPresent(day -> binding.day.setText(day));
 
 
