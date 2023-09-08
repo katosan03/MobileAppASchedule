@@ -44,7 +44,7 @@ public class MainActivity3 extends AppCompatActivity {
             //intent2.putExtra("schedule", binding.editschedule.getText().toString());
 
             var time = binding.edittime.getText().toString();
-            var schedule = binding.edittime.getText().toString();
+            var schedule = binding.editschedule.getText().toString();
             dataStore.setString("time1", time);
             dataStore.setString("naiyou1", schedule);
             startActivity(intent);
