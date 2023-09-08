@@ -37,7 +37,7 @@ public class MainActivity2 extends AppCompatActivity {
 
         //プラスボタンを押した場合（予定を追加する）
         binding.buttonPlus.setOnClickListener(view ->{
-            var intent = new Intent(this, MainActivity2.class);
+            var intent = new Intent(this, MainActivity3.class);
             startActivity(intent);
         });
 
