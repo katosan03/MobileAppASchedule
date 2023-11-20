@@ -55,6 +55,13 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         else{
         locationStart();
         }
+
+        //ボタンを押した場合（目的地を追加する）
+        binding.button.setOnClickListener(view ->{
+            var intent = new Intent(this, MainActivity5.class);
+            startActivity(intent);
+
+        });
     }
 
     private void locationStart(){
@@ -113,3 +120,12 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
 
     }
 }
+
+/*
+参考
+
+位置情報を取得する
+https://akira-watson.com/android/gps.html
+GoogleMapのAPI使うための設定
+https://developers.google.com/maps/documentation/android-sdk/start?hl=ja
+ */
