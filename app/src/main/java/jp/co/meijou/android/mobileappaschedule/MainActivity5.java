@@ -16,11 +16,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import androidx.navigation.ui.AppBarConfiguration;
+
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain5Binding;
 
 public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallback {
-    private ActivityMain5Binding binding;
     private AppBarConfiguration appBarConfiguration;
+    private ActivityMain5Binding binding;
     private LatLng mKansai = new LatLng(34.435912, 135.243496);
     private Marker mMarker = null;
 
@@ -32,9 +34,9 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
         setContentView(binding.getRoot());
 
         // Get a handle to the fragment and register the callback.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        mapfragment.getMapAsync(this);
 
 
     }
