@@ -36,7 +36,7 @@
 
         <activity
             android:name=".MainActivity4"
-            android:exported="true"/>
+            android:exported="false"/>
         <activity
             android:name=".MainActivity3"
             android:exported="false" />
@@ -46,12 +46,12 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" >
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

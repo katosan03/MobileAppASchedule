@@ -34,9 +34,9 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
         setContentView(binding.getRoot());
 
         // Get a handle to the fragment and register the callback.
-        SupportMapFragment mapfragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
-        mapfragment.getMapAsync(this);
+        mapFragment.getMapAsync(this);
 
 
     }
