@@ -21,8 +21,10 @@ import android.Manifest;
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain4Binding;
 
 public class MainActivity4 extends AppCompatActivity implements LocationListener{
+
     LocationManager locationManager;
     private ActivityMain4Binding binding;
+    private PrefDataStore prefDataStore;
 
     //permissionが許可されているかの確認
     private final ActivityResultLauncher<String>
@@ -32,10 +34,9 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
                     if (isGranted) {
                     locationStart();
                     }
+                    //permissionが許可されなかった場合の挙動---------NOTICE----変更必要
                     else {
-                    Toast toast = Toast.makeText(this,
-                    "これ以上なにもできません", Toast.LENGTH_SHORT);
-                    toast.show();
+                        Toast.makeText(getApplicationContext(), "目的地を登録するには位置情報の許可が必要です", Toast.LENGTH_LONG).show();
                     }
                     });
 
@@ -53,15 +54,9 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
                     Manifest.permission.ACCESS_FINE_LOCATION);
         }
         else{
-        locationStart();
+            locationStart();
         }
 
-        //ボタンを押した場合（目的地を追加する）
-        binding.button.setOnClickListener(view ->{
-            var intent = new Intent(this, MainActivity5.class);
-            startActivity(intent);
-
-        });
     }
 
     private void locationStart(){
@@ -93,21 +88,25 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         }
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                1000, 50, this);
-
+              100, 50, this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        // 緯度の表示
-        TextView textView1 = findViewById(R.id.textViewLoca);
-        String str1 = "Latitude:"+location.getLatitude();
-        textView1.setText(str1);
+        //datastoreの準備
+        prefDataStore = PrefDataStore.getInstance(this);
+        // 緯度の登録
+        Double lat = location.getLatitude();
+        prefDataStore.setString("lat", lat.toString());
 
-        // 経度の表示
-        TextView textView2 = findViewById(R.id.textViewLoca2);
-        String str2 = "Longitude:"+location.getLongitude();
-        textView2.setText(str2);
+        // 経度の登録
+        Double log = location.getLongitude();
+        prefDataStore.setString("log", log.toString());
+
+        //MainActivity5(位置設定に遷移)
+        var intent = new Intent(this, MainActivity5.class);
+        startActivity(intent);
+
     }
 
     @Override

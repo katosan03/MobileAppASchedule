@@ -5,8 +5,10 @@ package jp.co.meijou.android.mobileappaschedule;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import java.util.Optional;
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private PrefDataStore prefDataStore;
-
+    private double lat;
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -47,11 +49,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
         prefDataStore = PrefDataStore.getInstance(this);
 
         binding.button1.setOnClickListener(view ->{
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
+
+
+
+
+
             //intent.putExtra("text", binding.button1.getText().toString());
             var day = binding.button1.getText().toString();
             prefDataStore.setString("day", day);
@@ -60,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
             dataStore.getString("time1")
                     .ifPresent(time -> binding.);
              */
-
 
         });
 
