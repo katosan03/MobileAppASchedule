@@ -1,8 +1,11 @@
 package jp.co.meijou.android.mobileappaschedule;
 
+//googleマップの表示，目的地の登録
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.ui.AppBarConfiguration;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -19,13 +22,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain5Binding;
-
+import java.util.Optional;
 public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallback {
     private AppBarConfiguration appBarConfiguration;
     private ActivityMain5Binding binding;
-    private LatLng mKansai = new LatLng(34.435912, 135.243496);
-    private Marker mMarker = null;
 
+    //初期値名城大学天白キャンパス
+    private LatLng mLocation = new LatLng(35.135252, 136.975831);
+    private double lat = 0;
+    private double log = 0;
+
+    private Marker mMarker = null;
+    private PrefDataStore prefDataStore;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +52,24 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
     // Get a handle to the GoogleMap object and display marker.
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-                .position(mKansai)
-                .title("現在地"));
+
+        prefDataStore = PrefDataStore.getInstance(this);
+
+        //現在地の取得
+        prefDataStore.getString("lat")
+                .ifPresent(latdata -> lat = Double.parseDouble(latdata));
+
+        prefDataStore.getString("log")
+                .ifPresent(logdata -> log = Double.parseDouble(logdata));
+
+        if(lat != 0 && log != 0){
+            mLocation = new LatLng(lat, log);
+        }
 
         if(googleMap != null){
-            // 関西国際空港へ移動
+            //現在地（名城大学）へ移動
             CameraPosition cameraPos = new CameraPosition.Builder()
-                    .target(mKansai).zoom(10).build();
+                    .target(mLocation).zoom(14).build();
 
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPos));
 
@@ -59,6 +77,8 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
             mMarker = googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(0, 0)).title("目的地"));
 
+            //位置設定を促すトースト表示
+            Toast.makeText(getApplicationContext(), "目的地をタップしてください", Toast.LENGTH_LONG).show();
         }
 
         // タップ時のイベントハンドラ登録
@@ -66,13 +86,27 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onMapClick(LatLng point) {
                 // TODO Auto-generated method stub
-                // タッチ地点と目的地との最短距離の計算
-                float[] results = new float[1];
-                Location.distanceBetween(point.latitude, point.longitude, mKansai.latitude, mKansai.longitude, results);
-                Toast.makeText(getApplicationContext(), "関空までの距離：" + ( (Float)(results[0]/1000) ).toString() + "Km", Toast.LENGTH_LONG).show();
+                Double deslat,deslog;
+                deslat = point.latitude;
+                deslog = point.longitude;
+
+                //-------NOTICE-----テスト用の命名規則----
+                prefDataStore.setString("deslat",deslat.toString());
+                prefDataStore.setString("deslog",deslog.toString());
                 mMarker.setPosition(point);
+                //位置設定を促すトースト表示
+                Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
+               pagePass();
+
+
             }
         });
+    }
+
+    private void pagePass(){
+        //MainActivity(初期ページ)に遷移
+        var intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }
 
