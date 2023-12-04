@@ -45,16 +45,16 @@ public class MainActivity3 extends AppCompatActivity {
         dataStore.getString("day")
                 .ifPresent(day -> binding.day.setText(day));
 
-        textViewh = findViewById(R.id.text_view);
-        textViewm = findViewById(R.id.pratext);
+        textViewh = findViewById(R.id.textViewh);
+        textViewm = findViewById(R.id.textViewm);
         schedule = findViewById(R.id.editschedule);
 
         binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
             var intent = new Intent(this, MainActivity.class);
 
 
-            var hour = binding.textView.getText().toString();
-            var minute = binding.pratext.getText().toString();
+            var hour = binding.textViewh.getText().toString();
+            var minute = binding.textViewm.getText().toString();
             var schedule = binding.editschedule.getText().toString();
             String time = hour + minute;
             dataStore.setString("time1", time);

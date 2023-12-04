@@ -1,155 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
     xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="match_parent"
+
     android:layout_height="match_parent"
+
     android:background="#dfe"
+
     tools:context=".MainActivity3">
 
 
+
+
+
     <TextView
+
         android:id="@+id/day"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
+
         android:layout_marginTop="16sp"
+
         android:text="_月_日"
+
         android:textSize="34sp"
+
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent"
+
         app:layout_constraintBottom_toTopOf="@+id/switch1"/>
 
+
+
     <TextView
-        android:id="@+id/text_view"
+
+        android:id="@+id/textViewh"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
+
         android:textColor="#00f"
+
         android:textSize="40sp"
+
         android:gravity="left"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/pratext"
+
+        app:layout_constraintRight_toLeftOf="@+id/textViewm"
+
         app:layout_constraintLeft_toLeftOf="parent"
+
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+
+        app:layout_constraintVertical_bias="0.185" />
+
+
 
     <Spinner
+
         android:id="@+id/spinnerh"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
+
+        android:layout_width="166dp"
+
+        android:layout_height="50dp"
+
         android:background="#fff"
+
         android:gravity="center_horizontal"
+
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintLeft_toLeftOf="parent"
+
         app:layout_constraintRight_toLeftOf="@+id/spinnerm"
+
         app:layout_constraintTop_toTopOf="parent"
+
         app:layout_constraintVertical_bias="0.3" />
+
+
 
     <Spinner
+
         android:id="@+id/spinnerm"
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
+
+        android:layout_width="166dp"
+
+        android:layout_height="48dp"
+
         android:background="#fff"
+
         android:gravity="center_horizontal"
+
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintLeft_toRightOf="@+id/spinnerh"
+
         app:layout_constraintRight_toRightOf="parent"
+
         app:layout_constraintTop_toTopOf="parent"
+
         app:layout_constraintVertical_bias="0.3" />
 
-    <TextView
-        android:id="@+id/pratext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#00f"
-        android:textSize="40sp"
-        android:gravity="right"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/text_view"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+
 
     <TextView
-        android:id="@+id/koron"
+
+        android:id="@+id/textViewm"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text=":"
+
+        android:gravity="right"
+
         android:textColor="#00f"
+
         android:textSize="40sp"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+
+        app:layout_constraintLeft_toRightOf="@+id/textViewh"
+
+        app:layout_constraintRight_toRightOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.185" />
+
+
+
+    <TextView
+
+        android:id="@+id/koron"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="100dp"
+
+        android:text=":"
+
+        android:textColor="#00f"
+
+        android:textSize="40sp"
+
         app:layout_constraintBottom_toTopOf="@+id/spinnerh"
+
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent" />
 
+
+
     <Button
+
         android:id="@+id/button_ok"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
+
         android:text="保存"
+
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toStartOf="@+id/button_ng"
+
         app:layout_constraintStart_toStartOf="parent"
+
+
 
         app:layout_constraintTop_toBottomOf="@+id/editschedule" />
 
+
+
     <Button
+
         android:id="@+id/button_ng"
+
         android:layout_width="wrap_content"
+
         android:layout_height="wrap_content"
+
         android:text="戻る"
+
         app:layout_constraintBottom_toBottomOf="parent"
+
         app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toEndOf="@+id/button_ok"
 
+
+
         app:layout_constraintTop_toBottomOf="@+id/editschedule" />
 
+
+
     <EditText
+
         android:id="@+id/editschedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        android:layout_width="236dp"
+
+        android:layout_height="65dp"
+
         android:ems="10"
+
         android:gravity="start|top"
-        android:inputType="textMultiLine"
+
         android:hint="予定を入力"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
+        android:inputType="textMultiLine"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <Switch
+
         android:id="@+id/switch1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        android:layout_width="64dp"
+
+        android:layout_height="51dp"
+
         android:checked="true"
+
         android:text=""
+
         app:layout_constraintBottom_toTopOf="@+id/koron"
-        app:layout_constraintEnd_toStartOf="@id/PM"
-        app:layout_constraintStart_toEndOf="@id/AM"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
-    <TextView
-        android:id="@+id/AM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AM"
-        app:layout_constraintBottom_toTopOf="@+id/text_view"
-        app:layout_constraintEnd_toStartOf="@id/switch1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/PM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PM"
-        app:layout_constraintBottom_toTopOf="@+id/pratext"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/switch1"
+
+        app:layout_constraintStart_toStartOf="parent"
+
+        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintVertical_bias="0.783"
+
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+
+    <TextView
+
+        android:id="@+id/AM"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="AM"
+
+        app:layout_constraintBottom_toTopOf="@+id/textViewh"
+
+        app:layout_constraintEnd_toStartOf="@id/switch1"
+
+        app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
+    <TextView
+
+        android:id="@+id/PM"
+
+        android:layout_width="wrap_content"
+
+        android:layout_height="wrap_content"
+
+        android:text="PM"
+
+        app:layout_constraintBottom_toTopOf="@+id/textViewm"
+
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toEndOf="@id/switch1"
+
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
