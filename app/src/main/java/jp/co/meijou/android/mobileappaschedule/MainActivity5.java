@@ -96,7 +96,9 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
                 mMarker.setPosition(point);
                 //位置設定を促すトースト表示
                 Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
-               pagePass();
+
+                //MainActivity2（予定入力ページ）に遷移
+                pagePass();
 
 
             }
@@ -104,8 +106,8 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
     }
 
     private void pagePass(){
-        //MainActivity(初期ページ)に遷移
-        var intent = new Intent(this, MainActivity.class);
+        //MainActivity2（予定表示）に遷移
+        var intent = new Intent(this, MainActivity2.class);
         startActivity(intent);
     }
 }

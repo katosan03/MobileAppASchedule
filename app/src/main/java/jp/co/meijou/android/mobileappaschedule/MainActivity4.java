@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
 import android.provider.Settings;
@@ -26,17 +27,26 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
     private ActivityMain4Binding binding;
     private PrefDataStore prefDataStore;
 
+    //アプリを立ち上げた直後の場合：0，その他：1
+    private int flag = 0;
+
     //permissionが許可されているかの確認
     private final ActivityResultLauncher<String>
             requestPermissionLauncher = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             isGranted -> {
                     if (isGranted) {
-                    locationStart();
+                        binding.textViewLoca.setText("少々お待ちください...");
+                        locationStart();
                     }
-                    //permissionが許可されなかった場合の挙動---------NOTICE----変更必要
+                    //permissionが許可されなかった場合の挙動
                     else {
-                        Toast.makeText(getApplicationContext(), "目的地を登録するには位置情報の許可が必要です", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "目的地を設定するには位置情報を許可してください", Toast.LENGTH_LONG).show();
+                        if(flag == 0){
+                            flag = 1;
+                            var intent = new Intent(this, MainActivity.class);
+                            startActivity(intent);
+                        }
                     }
                     });
 
@@ -56,6 +66,17 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         else{
             locationStart();
         }
+
+        if(flag == 1){
+            binding.button4to3.setVisibility(View.VISIBLE);
+        }
+        //戻るボタンを押した場合（MainActivity3に戻る）
+        binding.button4to3.setOnClickListener(view ->{
+
+            var intent = new Intent(this, MainActivity3.class);
+            startActivity(intent);
+        });
+
 
     }
 
@@ -103,9 +124,17 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         Double log = location.getLongitude();
         prefDataStore.setString("log", log.toString());
 
-        //MainActivity5(位置設定に遷移)
-        var intent = new Intent(this, MainActivity5.class);
-        startActivity(intent);
+        if(flag == 0){
+            //MainActivity(カレンダーに遷移)
+            flag = 1;
+            var intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }else{
+            //MainActivity5(位置設定に遷移)
+            var intent = new Intent(this, MainActivity5.class);
+            startActivity(intent);
+        }
+
 
     }
 
