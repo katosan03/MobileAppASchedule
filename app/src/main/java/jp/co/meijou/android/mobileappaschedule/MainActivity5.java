@@ -34,6 +34,13 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
 
     private Marker mMarker = null;
     private PrefDataStore prefDataStore;
+
+    private String underSetting;
+    private String day;
+    private String kosuu;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +61,16 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
     public void onMapReady(GoogleMap googleMap) {
 
         prefDataStore = PrefDataStore.getInstance(this);
+
+        //入力途中のデータの読み出し
+        prefDataStore.getString("day")
+                .ifPresent(data -> day = data.toString());
+        prefDataStore.getString(day)
+                .ifPresent(num -> kosuu = num.toString());
+        String name = day + kosuu;
+        prefDataStore.getString(name)
+                .ifPresent(data -> underSetting = data.toString());
+
 
         //現在地の取得
         prefDataStore.getString("lat")
@@ -90,16 +107,16 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
                 deslat = point.latitude;
                 deslog = point.longitude;
 
-                //-------NOTICE-----テスト用の命名規則----
-                prefDataStore.setString("deslat",deslat.toString());
-                prefDataStore.setString("deslog",deslog.toString());
+                //目的地をdataStoreに格納
+                underSetting = underSetting + "_" + deslat.toString() + "_" + deslog.toString();
+                prefDataStore.setString(name, underSetting);
                 mMarker.setPosition(point);
+
                 //位置設定を促すトースト表示
                 Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
 
-                //MainActivity2（予定入力ページ）に遷移
+                //MainActivity2（予定表示ページ）に遷移
                 pagePass();
-
 
             }
         });

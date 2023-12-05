@@ -1,12 +1,17 @@
 package jp.co.meijou.android.mobileappaschedule;
 
-//位置情報を扱う（練習）
+//現在地の取得
+//MainActivity3からflagの書き換え
+
+import static androidx.core.content.PackageManagerCompat.LOG_TAG;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.datastore.core.DataStore;
+
 import android.os.Bundle;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -19,16 +24,21 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 import android.Manifest;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain4Binding;
 
 public class MainActivity4 extends AppCompatActivity implements LocationListener{
 
     LocationManager locationManager;
+    Timer timer;
     private ActivityMain4Binding binding;
     private PrefDataStore prefDataStore;
 
     //アプリを立ち上げた直後の場合：0，その他：1
-    private int flag = 0;
+    public int flag = 0;
 
     //permissionが許可されているかの確認
     private final ActivityResultLauncher<String>
@@ -55,29 +65,34 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         super.onCreate(savedInstanceState);
         binding = ActivityMain4Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //datastoreの準備
+        prefDataStore = PrefDataStore.getInstance(this);
 
+        //位置情報の取得スタート
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
             requestPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION);
+
+            //位置情報が許可されていない場合，戻るボタンの用意
+            if(flag == 1){
+                binding.button4to3.setVisibility(View.VISIBLE);
+            }
+
+            //戻るボタンを押した場合（MainActivity3に戻る）
+            binding.button4to3.setOnClickListener(view ->{
+
+                var intent = new Intent(this, MainActivity3.class);
+                startActivity(intent);
+            });
         }
         else{
             locationStart();
+            //設定した予定と近い時間のものを確認
+            checkScheduleStart(prefDataStore);
         }
-
-        if(flag == 1){
-            binding.button4to3.setVisibility(View.VISIBLE);
-        }
-        //戻るボタンを押した場合（MainActivity3に戻る）
-        binding.button4to3.setOnClickListener(view ->{
-
-            var intent = new Intent(this, MainActivity3.class);
-            startActivity(intent);
-        });
-
-
     }
 
     private void locationStart(){
@@ -109,13 +124,11 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         }
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-              100, 50, this);
+              100, 100, this);
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        //datastoreの準備
-        prefDataStore = PrefDataStore.getInstance(this);
         // 緯度の登録
         Double lat = location.getLatitude();
         prefDataStore.setString("lat", lat.toString());
@@ -147,6 +160,32 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
     public void onProviderDisabled(String provider) {
 
     }
+
+    public void checkScheduleStart(PrefDataStore prefDataStore){
+        //一定時間ごとに予定時間に近い予定があるかどうか確認
+        if(flag == 0) {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    GetPlace gp = new GetPlace(prefDataStore);
+                    int fGp = gp.hantei();
+                    if (fGp == 0) {
+                        Log.d("timeTest","not applicable");
+                    }
+                    //予定目的地付近にいる場合
+                    else if (fGp == 1) {
+                        Toast.makeText(getApplicationContext(), "目的地付近にいます", Toast.LENGTH_LONG).show();
+                    }
+                    //予定目的地の遠くにいる場合
+                    else {
+                        Toast.makeText(getApplicationContext(), "目的地付近にいないようです。急げばきっと間に合いますよ!", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }, 2000, 10000);      //----NOTICE!-------1分ごとに登録した予定と近い時間がないか確認
+        }
+    }
+
 }
 
 /*
@@ -156,4 +195,6 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
 https://akira-watson.com/android/gps.html
 GoogleMapのAPI使うための設定
 https://developers.google.com/maps/documentation/android-sdk/start?hl=ja
+タイマー
+https://android-note.open-memo.net/sub/event__schedule_task_with_timer.html
  */
