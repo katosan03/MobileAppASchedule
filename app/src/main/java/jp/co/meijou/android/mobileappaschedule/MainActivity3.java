@@ -7,14 +7,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Switch;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.Calendar;
 
 import android.content.Intent;
 
@@ -28,13 +36,13 @@ public class MainActivity3 extends AppCompatActivity {
     private ActivityMain3Binding binding;
     private PrefDataStore dataStore;
 
-    private final String[] hour = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+    private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
 
-    private final String[] minute = {"00","10","20","30","40","50"};
+    private final String[] minute = {"00", "10", "20", "30", "40", "50"};
 
-    private TextView textViewh;
-    private TextView textViewm;
-    private TextView schedule;
+    //private TextView textViewh;
+    //private TextView textViewm;
+    //private TextView schedule;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +53,9 @@ public class MainActivity3 extends AppCompatActivity {
         dataStore.getString("day")
                 .ifPresent(day -> binding.day.setText(day));
 
-        textViewh = findViewById(R.id.textViewh);
-        textViewm = findViewById(R.id.textViewm);
-        schedule = findViewById(R.id.editschedule);
+        //textViewh = findViewById(R.id.text_view);
+        //textViewm = findViewById(R.id.pratext);
+        //schedule = findViewById(R.id.editschedule);
 
         binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
             var intent = new Intent(this, MainActivity.class);
@@ -60,6 +68,7 @@ public class MainActivity3 extends AppCompatActivity {
             dataStore.setString("time1", time);
             dataStore.setString("naiyou1", schedule);
             startActivity(intent);
+            setAlarm();
         });
 
 
@@ -69,10 +78,10 @@ public class MainActivity3 extends AppCompatActivity {
 
         });
 
-        setContentView(R.layout.activity_main);
+        //setContentView(R.layout.activity_main);
 
-        Spinner spinnerh = findViewById(R.id.spinnerh);
-        Spinner spinnerm = findViewById(R.id.spinnerm);
+        //Spinner spinnerh = findViewById(R.id.spinnerh);
+        //Spinner spinnerm = findViewById(R.id.spinnerm);
 
         // ArrayAdapter
         ArrayAdapter<String> adapter
@@ -85,33 +94,35 @@ public class MainActivity3 extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // spinner に adapter をセット
-        spinnerh.setAdapter(adapter);
-        spinnerm.setAdapter(adapter2);
+        binding.spinnerh.setAdapter(adapter);
+        binding.spinnerm.setAdapter(adapter2);
 
         // リスナーを登録
-        spinnerh.setOnItemSelectedListener(new OnItemSelectedListener() {
+        binding.spinnerh.setOnItemSelectedListener(new OnItemSelectedListener() {
             //　アイテムが選択された時
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View view, int position, long id) {
-                Spinner spinner = (Spinner)parent;
-                String item = (String)spinner.getSelectedItem();
-                textViewh.setText(item);
+                Spinner spinner = (Spinner) parent;
+                String item = (String) spinner.getSelectedItem();
+                binding.textViewh.setText(item);
             }
+
             //　アイテムが選択されなかった
             public void onNothingSelected(AdapterView<?> parent) {
                 //
             }
         });
-        spinnerm.setOnItemSelectedListener(new OnItemSelectedListener() {
+        binding.spinnerm.setOnItemSelectedListener(new OnItemSelectedListener() {
             //　アイテムが選択された時
             @Override
             public void onItemSelected(AdapterView<?> parent,
                                        View view, int position, long id) {
-                Spinner spinner = (Spinner)parent;
-                String item = (String)spinner.getSelectedItem();
-                textViewm.setText(item);
+                Spinner spinner = (Spinner) parent;
+                String item = (String) spinner.getSelectedItem();
+                binding.textViewm.setText(item);
             }
+
             //　アイテムが選択されなかった
             public void onNothingSelected(AdapterView<?> parent) {
                 //
@@ -122,32 +133,56 @@ public class MainActivity3 extends AppCompatActivity {
         Switch sw1 = findViewById(R.id.switch1);
 
 
-        sw1.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Integer a = 12;
-                String b = (String) textViewh.getText();
-                int c = Integer.parseInt(b);
-                int d = a + c;
-                Integer i = Integer.valueOf(d);
-                String number = i.toString();
-
-                textViewh.setText(number);
-
-            } else {
-                Integer a = 12;
-                String b = (String) textViewh.getText();
-                int c = Integer.parseInt(b);
-                if(c > 12) {
-                    int d = c - a;
+        //sw1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+        binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Integer a = 12;
+                    String b = (String) binding.textViewh.getText();
+                    int c = Integer.parseInt(b);
+                    int d = a + c;
                     Integer i = Integer.valueOf(d);
                     String number = i.toString();
-                    textViewh.setText(number);
-                }
-                else{
-                    textViewh.setText(b);
+
+                    binding.textViewh.setText(number);
+
+                } else {
+                    Integer a = 12;
+                    String b = (String) binding.textViewh.getText();
+                    int c = Integer.parseInt(b);
+                    if (c > 12) {
+                        int d = c - a;
+                        Integer i = Integer.valueOf(d);
+                        String number = i.toString();
+                        binding.textViewh.setText(number);
+                    } else {
+                        binding.textViewh.setText(b);
+                    }
                 }
             }
         });
 
     }
+
+
+    private void setAlarm(){
+        Calendar calendar = Calendar.getInstance();
+        String zikoku = (String) binding.textViewh.getText();
+
+        int hour = Integer.parseInt(zikoku);
+        String hun = (String) binding.textViewm.getText();
+
+        int minute = Integer.parseInt(hun);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // アラームを設定するIntentを作成
+        Intent intent = new Intent(this, AlarmActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        // アラームを設定
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+
 }

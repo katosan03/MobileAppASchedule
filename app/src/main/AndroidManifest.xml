@@ -54,7 +54,7 @@
             android:name=".MainActivity"
             android:exported="true"/>
 
-
+        <receiver android:name=".AlarmActivity" />
     </application>
 
 </manifest>
