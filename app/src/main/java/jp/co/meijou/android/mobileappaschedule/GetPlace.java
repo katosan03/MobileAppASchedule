@@ -3,12 +3,14 @@ package jp.co.meijou.android.mobileappaschedule;
 //時刻，現在地の取得と距離の計算（hanteiの結果として　0:時刻の近い予定なしor位置情報OFF，1:すでに近くにいる，2:遠くにいる）
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.datastore.core.DataStore;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -25,7 +27,8 @@ public class GetPlace {
     private Double log = 0.0;
     private LatLng nowL;
 
-    GetPlace(){
+    GetPlace(PrefDataStore prefDataStore){
+        this.prefDataStore = prefDataStore;
         prefDataStore.getString("lat").ifPresent(str -> lat = Double.parseDouble(str));
         prefDataStore.getString("log").ifPresent(str -> log = Double.parseDouble(str));
         nowL = new LatLng(lat,log);
@@ -84,7 +87,7 @@ public class GetPlace {
                 int time = Integer.parseInt(gettime());
 
                 //設定時間が現在時間+-5分の場合
-                if(settime-time < 5 && settime-time >= -5){
+                if(settime == time){
                     Double deslat = 0.0;
                     Double deslog = 0.0;
 
@@ -109,9 +112,9 @@ public class GetPlace {
     }
 }
 /*
-他のActivityでGetPlaceする場合
+NOTE---他のActivityでGetPlaceする場合
 
-//位置情報の確認
+        //位置情報の確認
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -133,36 +136,11 @@ public class GetPlace {
             }
         }
 
-
-
-// 位置情報許可要求のダイアログを表示
-　　　　　　　if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            String[] permissions = {
-                    android.Manifest.permission.ACCESS_FINE_LOCATION,   // 高精度計測
-            };
-
-            final int REQ_CODE = 1;
-            ActivityCompat.requestPermissions(this, permissions, REQ_CODE);
-        }else {
-            var intent = new Intent(this, MainActivity4.class);
-            startActivity(intent);
-            //時刻の近い予定が設定されていないか確認
-            prefDataStore.getString("lat").ifPresent(latdata -> lat = Double.parseDouble(latdata));
-            if(lat != 0){
-                //GetPlace gp = new GetPlace();
-                //gp.getdistance();
-            }
-        }
-
-
  */
 
 /*
+位置情報の扱い（2）
 https://lapture.net/?p=2622
+Date型の使い方
 https://www.sejuku.net/blog/21098
-https://www.rouge.gr.jp/~fuku/androidstudio/location/
  */

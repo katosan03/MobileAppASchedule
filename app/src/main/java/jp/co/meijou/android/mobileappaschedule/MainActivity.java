@@ -22,28 +22,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private PrefDataStore prefDataStore;
 
-    private final ActivityResultLauncher<String>
-            requestPermissionLauncher = registerForActivityResult(
-            new ActivityResultContracts.RequestPermission(),
-            isGranted -> {
-                if (isGranted) {
-                    GetPlace gp = new GetPlace();
-                    int flag = gp.hantei();
-                    if(flag == 0){}
-                    //予定目的地付近にいる場合
-                    else if(flag == 1){
-                        Toast.makeText(getApplicationContext(), "目的地付近にいます", Toast.LENGTH_LONG).show();
-                    }
-                    //予定目的地の遠くにいる場合
-                    else{
-                        Toast.makeText(getApplicationContext(), "目的地付近にいないようです。急げばきっと間に合いますよ!", Toast.LENGTH_LONG).show();
-                    }
-                }
-                //permissionが許可されなかった場合の挙動
-                else {
-                    //Toast.makeText(getApplicationContext(), "テスト", Toast.LENGTH_LONG).show();
-                }
-            });
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -73,16 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        //位置情報の確認
-        if (ActivityCompat.checkSelfPermission(this,
-                android.Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissionLauncher.launch(
-                    Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        else{ }
 
         prefDataStore = PrefDataStore.getInstance(this);
 
