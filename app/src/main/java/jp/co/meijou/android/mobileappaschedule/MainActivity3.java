@@ -7,14 +7,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Switch;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import java.util.Calendar;
 
 import android.content.Intent;
 
@@ -60,12 +67,19 @@ public class MainActivity3 extends AppCompatActivity {
             dataStore.setString("time1", time);
             dataStore.setString("naiyou1", schedule);
             startActivity(intent);
+            //setAlarm();
         });
 
 
         binding.buttonNg.setOnClickListener(view -> {
             var intent2 = new Intent(this, MainActivity2.class);
             startActivity(intent2);
+
+        });
+
+        binding.buttonDest.setOnClickListener(view -> {
+            var intent3 = new Intent(this, MainActivity4.class);
+            startActivity(intent3);
 
         });
 
@@ -150,4 +164,25 @@ public class MainActivity3 extends AppCompatActivity {
         });
 
     }
+
+    private void setAlarm(){
+        Calendar calendar = Calendar.getInstance();
+        String zikoku = (String) textViewh.getText();
+
+        int hour = Integer.parseInt(zikoku);
+        String hun = (String) textViewm.getText();
+
+        int minute = Integer.parseInt(hun);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        // アラームを設定するIntentを作成
+        Intent intent = new Intent(this, AlarmActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
+        // アラームを設定
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+
 }
