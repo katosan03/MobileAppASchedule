@@ -34,24 +34,43 @@ import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain3Binding;
 public class MainActivity3 extends AppCompatActivity {
 
     private ActivityMain3Binding binding;
-    private PrefDataStore dataStore;
+    private PrefDataStore prefDataStore;
 
-    private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"};
+    private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
 
-    private final String[] minute = {"00", "10", "20", "30", "40", "50"};
+    private final String[] minute = {"00", "10", "20", "30", "40", "50"}; //分の配列
 
     //private TextView textViewh;
     //private TextView textViewm;
     //private TextView schedule;
+
+    int plann = 0; //予定の個数
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        dataStore = PrefDataStore.getInstance(this); //Contextの準備が出来る onCreate() で prefDataStore を初期化.
-        dataStore.getString("day")
+        prefDataStore = prefDataStore.getInstance(this);
+
+        /*
+        prefDataStore.getString("day")
                 .ifPresent(day -> binding.day.setText(day));
+                String Days = binding.day.getText() + "日";
+                binding.day.setText(Days);
+
+         */
+
+        String ymd = String.valueOf(prefDataStore.getString("day")); //yyyymmddを分解
+        int year = Integer.parseInt(ymd.substring(0, 4));
+        int month = Integer.parseInt(ymd.substring(4, 6));
+        int day = Integer.parseInt(ymd.substring(6, 8));
+
+        String years = String.valueOf(year);
+        String months = String.valueOf(month);
+        String days = String.valueOf(day);
+        String ymds = years + " " + months + "/" + days; //yyyy mm dd の形に再構築
+        binding.day.setText(ymds);
 
         //textViewh = findViewById(R.id.text_view);
         //textViewm = findViewById(R.id.pratext);
@@ -60,22 +79,42 @@ public class MainActivity3 extends AppCompatActivity {
         binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
             var intent = new Intent(this, MainActivity.class);
 
-
             var hour = binding.textViewh.getText().toString();
             var minute = binding.textViewm.getText().toString();
             var schedule = binding.editschedule.getText().toString();
-            String time = hour + minute;
-            dataStore.setString("time1", time);
-            dataStore.setString("naiyou1", schedule);
-            startActivity(intent);
-            setAlarm();
+            String time = hour + ":" + minute;
+            prefDataStore.setString("time1", time);
+            prefDataStore.setString("naiyou1", schedule);
+
+            setAlarm(); //アラームのセット
+
+            String ymdr = String.valueOf(prefDataStore.getString("day"));
+            String deslat = String.valueOf(prefDataStore.getString("lat"));
+            String deslog = String.valueOf(prefDataStore.getString("log"));
+
+            String number = String.valueOf(plann);
+            String ymdn = ymdr + number; //yyyymmdd(n)
+            String hmpdd = hour + minute + "-" + schedule + "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
+            prefDataStore.setString(ymdr, String.valueOf(plann)); //yyyymmddキー
+            prefDataStore.setString(ymdn, String.valueOf(hmpdd));//yyyymmdd(n)キー
+
+            plann += 1;
+
+            startActivity(intent); //mainに移動
         });
 
 
-        binding.buttonNg.setOnClickListener(view -> {
-            var intent2 = new Intent(this, MainActivity2.class);
+        binding.buttonNg.setOnClickListener(view -> { //戻るボタンの動作
+            var intent2 = new Intent(this, MainActivity2.class); //main2に移動
             startActivity(intent2);
 
+        });
+
+        binding.buttonDest.setOnClickListener(view -> { //目的地ボタンの動作
+            var intent3 = new Intent(this, MainActivity4.class); //main4へ移動
+
+            plann += 1;
+            startActivity(intent3);
         });
 
         //setContentView(R.layout.activity_main);
@@ -84,7 +123,7 @@ public class MainActivity3 extends AppCompatActivity {
         //Spinner spinnerm = findViewById(R.id.spinnerm);
 
         // ArrayAdapter
-        ArrayAdapter<String> adapter
+        ArrayAdapter<String> adapter  //spinner1,2の設定
                 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, hour);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -130,13 +169,13 @@ public class MainActivity3 extends AppCompatActivity {
         });
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
-        Switch sw1 = findViewById(R.id.switch1);
+        Switch sw1 = findViewById(R.id.switch1); //switch1の設定
 
 
         //sw1.setOnCheckedChangeListener((buttonView, isChecked) -> {
         binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
+                if (isChecked) { //PMなら12を足したあたいを表示
                     Integer a = 12;
                     String b = (String) binding.textViewh.getText();
                     int c = Integer.parseInt(b);
@@ -146,11 +185,11 @@ public class MainActivity3 extends AppCompatActivity {
 
                     binding.textViewh.setText(number);
 
-                } else {
+                } else { //AMの場合
                     Integer a = 12;
                     String b = (String) binding.textViewh.getText();
                     int c = Integer.parseInt(b);
-                    if (c > 12) {
+                    if (c > 12) { //時間表記をAMのものに戻す
                         int d = c - a;
                         Integer i = Integer.valueOf(d);
                         String number = i.toString();
@@ -165,7 +204,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
 
-    private void setAlarm(){
+    private void setAlarm(){ //アラームの設定の中身
         Calendar calendar = Calendar.getInstance();
         String zikoku = (String) binding.textViewh.getText();
 
