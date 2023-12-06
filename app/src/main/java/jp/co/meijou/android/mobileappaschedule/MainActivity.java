@@ -8,10 +8,13 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import android.widget.CalendarView;
+
 import android.widget.Toast;
 
 import java.util.Calendar;
@@ -23,11 +26,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private PrefDataStore prefDataStore;
+
     private double lat;
 
     private int Year;
     private int Month;
     private int DayOfMonth;
+
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -74,8 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
 
         prefDataStore = PrefDataStore.getInstance(this);
 
