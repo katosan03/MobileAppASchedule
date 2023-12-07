@@ -101,12 +101,12 @@ public class MainActivity3 extends AppCompatActivity {
             setAlarm(); //アラームのセット
 
             String ymdr = String.valueOf(prefDataStore.getString("day"));
-            String deslat = String.valueOf(prefDataStore.getString("lat"));
-            String deslog = String.valueOf(prefDataStore.getString("log"));
+            //String deslat = String.valueOf(prefDataStore.getString("lat"));
+            //String deslog = String.valueOf(prefDataStore.getString("log"));
 
             String number = String.valueOf(plann);
             String ymdn = ymdr + number; //yyyymmdd(n)
-            String hmpdd = hour + minute + "-" + schedule + "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
+            String hmpdd = hour + minute + "-" + schedule; //+ "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
             prefDataStore.setString(ymdr, String.valueOf(plann)); //yyyymmddキー
             prefDataStore.setString(ymdn, String.valueOf(hmpdd));//yyyymmdd(n)キー
 
