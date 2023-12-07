@@ -4,6 +4,7 @@ package jp.co.meijou.android.mobileappaschedule;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -11,8 +12,12 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
+import android.widget.CalendarView;
+
 import android.widget.Toast;
 
+import java.util.Calendar;
 import java.util.Optional;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMainBinding;
@@ -22,6 +27,11 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private PrefDataStore prefDataStore;
 
+    private double lat;
+
+    private int Year;
+    private int Month;
+    private int DayOfMonth;
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -52,24 +62,41 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //CalendarViewインスタント生成
+        //CalendarView calendar = findViewById(R.id.calendarView);
+
+        //日付を選択した時のリスナー
+        binding.calendarView.setOnDateChangeListener(
+                new CalendarView.OnDateChangeListener() {
+                    @Override
+                    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                        String message = year + "/" + (month + 1) + "/" + dayOfMonth;
+                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        Year = year;
+                        Month = month + 1;
+                        DayOfMonth = dayOfMonth;
+                        binding.textView.setText(Year + "年" + Month + "月" + DayOfMonth + "日");
+                    }
+                }
+        );
+
         prefDataStore = PrefDataStore.getInstance(this);
 
-        binding.button1.setOnClickListener(view ->{
+        binding.addSchedule.setOnClickListener(view ->{
+            var day = Year + Month + DayOfMonth;
+            prefDataStore.setString("day", String.valueOf(day));//ここが合っているかはActivity２に移さないと分からない
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
 
 
 
 
-
             //intent.putExtra("text", binding.button1.getText().toString());
-            var day = binding.button1.getText().toString();
-            prefDataStore.setString("day", day);
-            /*
 
-            dataStore.getString("time1")
-                    .ifPresent(time -> binding.);
-             */
+
+
+            //dataStore.getString("time1").ifPresent(time -> binding.);
+
 
         });
 
