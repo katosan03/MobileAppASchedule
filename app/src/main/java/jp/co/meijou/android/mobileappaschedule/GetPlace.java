@@ -80,7 +80,7 @@ public class GetPlace {
                 String str1 = "0";
                 String[] arr = new String[2];
                 prefDataStore.getString(keyname).ifPresent(str -> arr[0] = str);
-                String[] naiyou = arr[0].split("_");
+                String[] naiyou = arr[0].split("-");
                 //設定時間
                 int settime = Integer.parseInt(naiyou[0]);
                 //現在時間

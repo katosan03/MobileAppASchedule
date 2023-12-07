@@ -54,6 +54,12 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
         mapFragment.getMapAsync(this);
 
 
+        binding.button5.setOnClickListener(view -> { //戻るボタンの動作
+            if(mMarker != null){
+                var intent2 = new Intent(this, MainActivity2.class); //main2に移動
+                startActivity(intent2);
+            }
+        });
     }
 
     // Get a handle to the GoogleMap object and display marker.
@@ -63,14 +69,10 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
         prefDataStore = PrefDataStore.getInstance(this);
 
         //入力途中のデータの読み出し
-        prefDataStore.getString("day")
-                .ifPresent(data -> day = data.toString());
-        prefDataStore.getString(day)
-                .ifPresent(num -> kosuu = num.toString());
+        prefDataStore.getString("day").ifPresent(data -> day = data.toString());
+        prefDataStore.getString(day).ifPresent(num -> kosuu = num.toString());
         String name = day + kosuu;
-        prefDataStore.getString(name)
-                .ifPresent(data -> underSetting = data.toString());
-
+        prefDataStore.getString(name).ifPresent(data -> underSetting = data.toString());
 
         //現在地の取得
         prefDataStore.getString("lat")
@@ -106,12 +108,13 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
                 Double deslat,deslog;
                 deslat = point.latitude;
                 deslog = point.longitude;
+                //ポインターを設置
+                mMarker.setPosition(point);
 
                 binding.button5.setOnClickListener(view -> {
                     //目的地をdataStoreに格納
-                    underSetting = underSetting + "_" + deslat.toString() + "_" + deslog.toString();
+                    underSetting = underSetting + "-" + deslat.toString() + "-" + deslog.toString();
                     prefDataStore.setString(name, underSetting);
-                    mMarker.setPosition(point);
                     //位置設定を伝えるトースト表示
                     Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
                     //MainActivity2（予定表示ページ）に遷移
