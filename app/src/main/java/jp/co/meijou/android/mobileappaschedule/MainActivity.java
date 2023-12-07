@@ -63,10 +63,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         //CalendarViewインスタント生成
-        CalendarView calendar = findViewById(R.id.calendarView);
+        //CalendarView calendar = findViewById(R.id.calendarView);
 
         //日付を選択した時のリスナー
-        calendar.setOnDateChangeListener(
+        binding.calendarView.setOnDateChangeListener(
                 new CalendarView.OnDateChangeListener() {
                     @Override
                     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
