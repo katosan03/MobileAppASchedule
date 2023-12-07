@@ -33,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     private double lat;
 
-    private int Year;
-    private int Month;
-    private int DayOfMonth;
+    private String Year;
+    private String Month;
+    private String DayOfMonth;
 
     private int Day;
 
@@ -85,9 +85,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                         String message = year + "/" + (month + 1) + "/" + dayOfMonth;
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                        Year = year;
-                        Month = month + 1;
-                        DayOfMonth = dayOfMonth;
+                        Year = String.format("%04d",year);
+                        Month = String.format("%02d",month + 1);
+                        DayOfMonth = String.format("%02d",dayOfMonth);
                         binding.addSchedule.setText(Year + "年" + Month + "月" + DayOfMonth + "日の予定");
                     }
                 }
@@ -96,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
         prefDataStore = PrefDataStore.getInstance(this);
 
         binding.addSchedule.setOnClickListener(view ->{
+
             String day = String.format("%02d%02d%02d", Year, Month, DayOfMonth);
+
             prefDataStore.setString("day", day);//ここが合っているかはActivity２に移さないと分からない
             Log.d("day",day);
             var intent = new Intent(this, MainActivity2.class);

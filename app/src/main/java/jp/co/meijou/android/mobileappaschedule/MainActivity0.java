@@ -39,10 +39,14 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
             isGranted -> {
                 if (isGranted) {
                     locationStart();
+                    //設定した予定と近い時間のものを確認
+                    checkScheduleStart(prefDataStore);
                 }
                 //permissionが許可されなかった場合の挙動
                 else {
                     Toast.makeText(getApplicationContext(), "目的地を設定するには位置情報を許可してください", Toast.LENGTH_LONG).show();
+                    //設定した予定と近い時間のものを確認
+                    checkScheduleStart(prefDataStore);
                 }
             });
 
@@ -64,9 +68,8 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
         }
         else{
             locationStart();
+            checkScheduleStart(prefDataStore);
         }
-        //設定した予定と近い時間のものを確認
-        checkScheduleStart(prefDataStore);
     }
 
     private void locationStart(){

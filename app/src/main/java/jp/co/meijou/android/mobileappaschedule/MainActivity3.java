@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -40,7 +41,7 @@ public class MainActivity3 extends AppCompatActivity {
     private ActivityMain3Binding binding;
     private PrefDataStore prefDataStore;
 
-
+    private String ymd;
 
     private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
 
@@ -56,7 +57,7 @@ public class MainActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        Log.d("create","locationStart()");
         prefDataStore = prefDataStore.getInstance(this);
 
 
@@ -69,21 +70,23 @@ public class MainActivity3 extends AppCompatActivity {
 
          */
 
-        String ymd = String.valueOf(prefDataStore.getString("day")); //yyyymmddを分解
-        int year = Integer.parseInt(ymd.substring(0, 4));
-        int month = Integer.parseInt(ymd.substring(4, 6));
-        int day = Integer.parseInt(ymd.substring(6, 8));
+        //String ymd = String.valueOf(prefDataStore.getString("day")); //yyyymmddを分解
+        prefDataStore.getString("day").ifPresent(datas -> ymd = datas.toString());
+        //int year = Integer.parseInt(ymd.substring(0, 4));
+        //int month = Integer.parseInt(ymd.substring(4, 6));
+        //int day = Integer.parseInt(ymd.substring(6, 8));
+        String year = ymd.substring(0, 4);
+        String month = ymd.substring(4, 6);
+        String day = ymd.substring(6, 8);
 
-        prefDataStore.getString(ymd)
-                .ifPresent(plans -> plann = Integer.parseInt((plans)));
+        prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt((plans)));
 
 
-        String years = String.valueOf(year);
-        String months = String.valueOf(month);
-        String days = String.valueOf(day);
-        String ymds = years + " " + months + "/" + days; //yyyy mm dd の形に再構築
+        //String years = String.valueOf(year);
+        //String months = String.valueOf(month);
+        //String days = String.valueOf(day);
+        String ymds = year + "/" + month + "/" + day; //yyyy mm dd の形に再構築
         binding.day.setText(ymds);
-
         //textViewh = findViewById(R.id.text_view);
         //textViewm = findViewById(R.id.pratext);
         //schedule = findViewById(R.id.editschedule);
