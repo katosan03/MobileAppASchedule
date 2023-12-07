@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding.addSchedule.setOnClickListener(view ->{
 
-            String day = String.format("%02d%02d%02d", Year, Month, DayOfMonth);
+            String day = Year + Month + DayOfMonth;
 
             prefDataStore.setString("day", day);//ここが合っているかはActivity２に移さないと分からない
             Log.d("day",day);
