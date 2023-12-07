@@ -71,7 +71,6 @@ public class MainActivity3 extends AppCompatActivity {
             setAlarm();
         });
 
-
         binding.buttonNg.setOnClickListener(view -> {
             var intent2 = new Intent(this, MainActivity2.class);
             startActivity(intent2);
