@@ -17,7 +17,10 @@ import android.widget.CalendarView;
 
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMainBinding;
@@ -55,6 +58,12 @@ public class MainActivity extends AppCompatActivity {
     );
 
      */
+    //現在の日付を取得する
+    public String getNowDate(){
+        final DateFormat df = new SimpleDateFormat("yyyy年MM月dd日");
+        final Date date = new Date(System.currentTimeMillis());
+        return df.format(date);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
         //CalendarViewインスタント生成
         //CalendarView calendar = findViewById(R.id.calendarView);
+        binding.textView.setText(getNowDate());
 
         //日付を選択した時のリスナー
         binding.calendarView.setOnDateChangeListener(
@@ -75,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         Year = year;
                         Month = month + 1;
                         DayOfMonth = dayOfMonth;
-                        binding.textView.setText(Year + "年" + Month + "月" + DayOfMonth + "日");
+                        binding.addSchedule.setText(Year + "年" + Month + "月" + DayOfMonth + "日の予定");
                     }
                 }
         );
@@ -83,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
         prefDataStore = PrefDataStore.getInstance(this);
 
         binding.addSchedule.setOnClickListener(view ->{
-            var day = Year + Month + DayOfMonth;
-            prefDataStore.setString("day", String.valueOf(day));//ここが合っているかはActivity２に移さないと分からない
+            String day = Integer.toString(Year) + Integer.toString(Month) + Integer.toString(DayOfMonth);
+            prefDataStore.setString("day", day);//ここが合っているかはActivity２に移さないと分からない
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
 
