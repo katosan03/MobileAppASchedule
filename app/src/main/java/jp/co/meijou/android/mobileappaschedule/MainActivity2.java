@@ -25,6 +25,10 @@ public class MainActivity2 extends AppCompatActivity {
     private String day;
     private int kosuu = 0;
 
+
+    String times[];
+    String plans[];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +37,8 @@ public class MainActivity2 extends AppCompatActivity {
         prefDataStore = prefDataStore.getInstance(this);
         prefDataStore.getString("day").ifPresent(datas -> day = datas.toString());
         binding.textday.setText(day.substring(0, 2) + "月"+ day.substring(2, 4) + "日");
+
+
 
 
         //プラスボタンを押した場合（予定を追加する）

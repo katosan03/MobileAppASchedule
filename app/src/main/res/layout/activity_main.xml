@@ -9,45 +9,47 @@
 
     <TextView
         android:id="@+id/todayPlan"
-        android:layout_width="389dp"
-        android:layout_height="155dp"
-        android:text="予定："
-        app:layout_constraintBottom_toTopOf="@id/calendarView"
+        android:layout_width="381dp"
+        android:layout_height="262dp"
+        android:layout_marginTop="8dp"
+        android:text="今日の予定："
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintHorizontal_bias="0.366"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/textView" />
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/addSchedule"
+        app:layout_constraintBottom_toTopOf="@id/todayPlan"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todayPlan" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.096" />
 
     <Button
         android:id="@+id/addSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="予定を追加"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="...年...月...日の予定"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        app:layout_constraintTop_toBottomOf="@id/calendarView" />
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="336dp"
-        android:layout_height="39dp"
+        android:layout_width="369dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="28dp"
         android:text="...年...月...日"
-        android:textSize="24sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.059"
+        app:layout_constraintHorizontal_bias="0.261"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/addSchedule" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
