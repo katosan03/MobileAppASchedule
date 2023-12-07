@@ -42,6 +42,9 @@ public class MainActivity3 extends AppCompatActivity {
     private PrefDataStore prefDataStore;
 
     private String ymd;
+    private String ymdr;
+    private String hmpdd;
+
 
     private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
 
@@ -79,7 +82,7 @@ public class MainActivity3 extends AppCompatActivity {
         String month = ymd.substring(4, 6);
         String day = ymd.substring(6, 8);
 
-        prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt((plans)));
+        prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt(plans) + 1);
 
 
         //String years = String.valueOf(year);
@@ -103,15 +106,20 @@ public class MainActivity3 extends AppCompatActivity {
 
             setAlarm(); //アラームのセット
 
-            String ymdr = String.valueOf(prefDataStore.getString("day"));
+            prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
+            //String ymdr = String.valueOf(prefDataStore.getString("day"));
             //String deslat = String.valueOf(prefDataStore.getString("lat"));
             //String deslog = String.valueOf(prefDataStore.getString("log"));
 
-            String number = String.valueOf(plann);
+            String number = Integer.toString(plann);
+            //String number = String.valueOf(plann);
             String ymdn = ymdr + number; //yyyymmdd(n)
-            String hmpdd = hour + minute + "-" + schedule; //+ "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
-            prefDataStore.setString(ymdr, String.valueOf(plann)); //yyyymmddキー
-            prefDataStore.setString(ymdn, String.valueOf(hmpdd));//yyyymmdd(n)キー
+            hmpdd = hour + minute + "-" + schedule; //+ "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
+            prefDataStore.getString(ymdr).ifPresent(datas -> plann = Integer.parseInt(datas.toString()));
+            //prefDataStore.setString(ymdr, String.valueOf(plann)); //yyyymmddキー
+            prefDataStore.getString(ymdn).ifPresent(datas -> hmpdd = datas.toString());
+            //prefDataStore.setString(ymdn, String.valueOf(hmpdd));//yyyymmdd(n)キー
+
 
             plann += 1;
 
