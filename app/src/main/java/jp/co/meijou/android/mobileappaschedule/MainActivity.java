@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.widget.CalendarView;
 
 import android.widget.Toast;
@@ -35,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     private int Year;
     private int Month;
     private int DayOfMonth;
+
+    private int Day;
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -93,8 +96,9 @@ public class MainActivity extends AppCompatActivity {
         prefDataStore = PrefDataStore.getInstance(this);
 
         binding.addSchedule.setOnClickListener(view ->{
-            String day = Integer.toString(Year) + Integer.toString(Month) + Integer.toString(DayOfMonth);
+            String day = String.format("%02d%02d%02d", Year, Month, DayOfMonth);
             prefDataStore.setString("day", day);//ここが合っているかはActivity２に移さないと分からない
+            Log.d("day",day);
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
 
