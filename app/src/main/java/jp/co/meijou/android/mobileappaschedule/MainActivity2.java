@@ -36,7 +36,7 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(binding.getRoot());
         prefDataStore = prefDataStore.getInstance(this);
         prefDataStore.getString("day").ifPresent(datas -> day = datas.toString());
-        binding.textday.setText(day.substring(4, 6) + "月"+ day.substring(6, 8) + "日");
+        binding.textday.setText(day.substring(0,4) + "/" + day.substring(4, 6) + "/"+ day.substring(6, 8));
 
 
 

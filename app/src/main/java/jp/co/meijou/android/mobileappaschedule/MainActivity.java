@@ -7,21 +7,27 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import android.view.View;
 import android.util.Log;
+
 import android.widget.CalendarView;
 
 import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMainBinding;
@@ -36,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     private String Year;
     private String Month;
     private String DayOfMonth;
+    private String today;
+
+    private int kosuu;
 
     private int Day;
 
@@ -88,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                         Year = String.format("%04d",year);
                         Month = String.format("%02d",month + 1);
                         DayOfMonth = String.format("%02d",dayOfMonth);
+                        //ボタンの表示
+                        binding.addSchedule.setVisibility(View.VISIBLE);
                         binding.addSchedule.setText(Year + "年" + Month + "月" + DayOfMonth + "日の予定");
                     }
                 }
@@ -115,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
-
-
-
 
     }
 }
