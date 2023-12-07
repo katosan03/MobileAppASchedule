@@ -104,8 +104,10 @@ public class MainActivity3 extends AppCompatActivity {
         });
 
 
+
         binding.buttonNg.setOnClickListener(view -> { //戻るボタンの動作
             var intent2 = new Intent(this, MainActivity2.class); //main2に移動
+
             startActivity(intent2);
 
         });

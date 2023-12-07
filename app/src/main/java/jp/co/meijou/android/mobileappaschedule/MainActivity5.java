@@ -107,17 +107,16 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
                 deslat = point.latitude;
                 deslog = point.longitude;
 
-                //目的地をdataStoreに格納
-                underSetting = underSetting + "_" + deslat.toString() + "_" + deslog.toString();
-                prefDataStore.setString(name, underSetting);
-                mMarker.setPosition(point);
-
-                //位置設定を促すトースト表示
-                Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
-
-                //MainActivity2（予定表示ページ）に遷移
-                pagePass();
-
+                binding.button5.setOnClickListener(view -> {
+                    //目的地をdataStoreに格納
+                    underSetting = underSetting + "_" + deslat.toString() + "_" + deslog.toString();
+                    prefDataStore.setString(name, underSetting);
+                    mMarker.setPosition(point);
+                    //位置設定を伝えるトースト表示
+                    Toast.makeText(getApplicationContext(), "目的地を設定しました", Toast.LENGTH_LONG).show();
+                    //MainActivity2（予定表示ページ）に遷移
+                    pagePass();
+                });
             }
         });
     }
