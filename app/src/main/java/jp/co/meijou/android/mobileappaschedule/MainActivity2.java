@@ -25,7 +25,10 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(binding.getRoot());
         prefDataStore = prefDataStore.getInstance(this);
 
+
         String ymd = String.valueOf(prefDataStore.getString("day"));
+
+/*
         String n = String.valueOf(prefDataStore.getString(ymd)); //予定の個数
         String ymdn = ymd + n;
         String hpdd = String.valueOf(prefDataStore.getString(ymdn)); //hhmm-plan-deslat-deslog
@@ -57,7 +60,9 @@ public class MainActivity2 extends AppCompatActivity {
             }
         }
 
-        /*
+ */
+
+
         //すでにデータがあれば記載
         prefDataStore.getString("time1")
                 .ifPresent(name -> binding.texttime1.setText(name));
@@ -74,7 +79,7 @@ public class MainActivity2 extends AppCompatActivity {
         prefDataStore.getString("naiyou2")
                 .ifPresent(name -> binding.textnaiyou1.setText(name));
 
-         */
+
 
         //プラスボタンを押した場合（予定を追加する）
         binding.buttonPlus.setOnClickListener(view ->{
