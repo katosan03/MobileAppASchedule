@@ -1,7 +1,6 @@
 package jp.co.meijou.android.mobileappaschedule;
 
 //現在地の取得
-//MainActivity3からflagの書き換え
 
 import static androidx.core.content.PackageManagerCompat.LOG_TAG;
 

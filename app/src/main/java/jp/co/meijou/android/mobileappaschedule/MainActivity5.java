@@ -86,7 +86,6 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
         }
 
         if(googleMap != null){
-            //現在地（名城大学）へ移動
             CameraPosition cameraPos = new CameraPosition.Builder()
                     .target(mLocation).zoom(14).build();
 

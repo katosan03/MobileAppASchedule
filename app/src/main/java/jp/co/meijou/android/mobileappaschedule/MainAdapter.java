@@ -14,7 +14,6 @@ import java.util.List;
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
 
     private List<MainActivity2.RowData> rowDataList;
-
     MainAdapter(List<MainActivity2.RowData> rowDataList) {
         this.rowDataList = rowDataList;
     }
@@ -32,6 +31,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             naiyouContents = itemView.findViewById(R.id.naiyou_text_view);
         }
     }
+
 
     /**
      * ViewHolder作るメソッド
