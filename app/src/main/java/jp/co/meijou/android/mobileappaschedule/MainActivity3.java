@@ -2,6 +2,8 @@ package jp.co.meijou.android.mobileappaschedule;
 
 //予定を書き足すページ
 
+import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -26,6 +28,8 @@ import java.util.Calendar;
 
 import android.content.Intent;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.Optional;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
@@ -35,6 +39,8 @@ public class MainActivity3 extends AppCompatActivity {
 
     private ActivityMain3Binding binding;
     private PrefDataStore prefDataStore;
+
+
 
     private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
 
@@ -53,6 +59,8 @@ public class MainActivity3 extends AppCompatActivity {
 
         prefDataStore = prefDataStore.getInstance(this);
 
+
+
         /*
         prefDataStore.getString("day")
                 .ifPresent(day -> binding.day.setText(day));
@@ -65,6 +73,10 @@ public class MainActivity3 extends AppCompatActivity {
         int year = Integer.parseInt(ymd.substring(0, 4));
         int month = Integer.parseInt(ymd.substring(4, 6));
         int day = Integer.parseInt(ymd.substring(6, 8));
+
+        prefDataStore.getString(ymd)
+                .ifPresent(plans -> plann = Integer.parseInt((plans)));
+
 
         String years = String.valueOf(year);
         String months = String.valueOf(month);
