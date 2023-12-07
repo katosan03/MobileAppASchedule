@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
 
     private double lat;
 
-    private int Year;
-    private int Month;
-    private int DayOfMonth;
+    private String Year;
+    private String Month;
+    private String DayOfMonth;
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                         String message = year + "/" + (month + 1) + "/" + dayOfMonth;
                         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-                        Year = year;
-                        Month = month + 1;
-                        DayOfMonth = dayOfMonth;
+                        Year = String.format("%04d",year);
+                        Month = String.format("%02d",month + 1);
+                        DayOfMonth = String.format("%02d",dayOfMonth);
                         binding.addSchedule.setText(Year + "年" + Month + "月" + DayOfMonth + "日の予定");
                     }
                 }
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         prefDataStore = PrefDataStore.getInstance(this);
 
         binding.addSchedule.setOnClickListener(view ->{
-            String day = Integer.toString(Year) + Integer.toString(Month) + Integer.toString(DayOfMonth);
+            String day = Year + Month + DayOfMonth;
             prefDataStore.setString("day", day);//ここが合っているかはActivity２に移さないと分からない
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
