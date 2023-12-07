@@ -38,9 +38,6 @@ public class MainActivity2 extends AppCompatActivity {
         prefDataStore.getString("day").ifPresent(datas -> day = datas.toString());
         binding.textday.setText(day.substring(0,4) + "/" + day.substring(4, 6) + "/"+ day.substring(6, 8));
 
-
-
-
         //プラスボタンを押した場合（予定を追加する）
         binding.buttonPlus.setOnClickListener(view ->{
             var intent = new Intent(this, MainActivity3.class);
@@ -72,21 +69,23 @@ public class MainActivity2 extends AppCompatActivity {
         List<RowData> dataSet = new ArrayList<>();
         prefDataStore.getString(day).ifPresent(kosu -> kosuu = Integer.parseInt(kosu));
         int i = 0;
-        while (i <= kosuu) {
+        while (i < kosuu) {
             RowData data = new RowData();
 
-            String name = day + kosuu;
+            i = i + 1;
+            Integer n = Integer.valueOf(i);
+            String name = day + n.toString();
             String[] arr = new String[2];
             prefDataStore.getString(name).ifPresent(str -> arr[0] = str);
             if(arr[0] != null){
                 String[] naiyou = arr[0].split("-");
-                String jikoku = naiyou[0];
-                data.jikanTitle = jikoku.substring(0, 2) + "："+ jikoku.substring(2, 4);;;
-                data.naiyouContents = arr[1];
+                String jikoku = arr[0];
+                data.jikanTitle = jikoku.substring(0, 2) + "："+ jikoku.substring(2, 4);
+                data.naiyouContents = naiyou[1];
             }
 
             dataSet.add(data);
-            i = i + 1;
+
         }
         return dataSet;
     }

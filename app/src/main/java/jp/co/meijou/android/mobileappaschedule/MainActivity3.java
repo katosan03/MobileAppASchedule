@@ -37,22 +37,13 @@ import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain3Binding;
 
 public class MainActivity3 extends AppCompatActivity {
-
     private ActivityMain3Binding binding;
     private PrefDataStore prefDataStore;
-
     private String ymd;
     private String ymdr;
     private String hmpdd;
-
-
     private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
-
     private final String[] minute = {"00", "10", "20", "30", "40", "50"}; //分の配列
-
-    //private TextView textViewh;
-    //private TextView textViewm;
-    //private TextView schedule;
 
     int plann = 0; //予定の個数
 
@@ -60,73 +51,40 @@ public class MainActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMain3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Log.d("create","locationStart()");
         prefDataStore = prefDataStore.getInstance(this);
 
-
-
-        /*
-        prefDataStore.getString("day")
-                .ifPresent(day -> binding.day.setText(day));
-                String Days = binding.day.getText() + "日";
-                binding.day.setText(Days);
-
-         */
-
-        //String ymd = String.valueOf(prefDataStore.getString("day")); //yyyymmddを分解
         prefDataStore.getString("day").ifPresent(datas -> ymd = datas.toString());
-        //int year = Integer.parseInt(ymd.substring(0, 4));
-        //int month = Integer.parseInt(ymd.substring(4, 6));
-        //int day = Integer.parseInt(ymd.substring(6, 8));
         String year = ymd.substring(0, 4);
         String month = ymd.substring(4, 6);
         String day = ymd.substring(6, 8);
 
-        prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt(plans) + 1);
+        prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt(plans));  //今までに登録のあるその日（day）予定の個数
 
-
-        //String years = String.valueOf(year);
-        //String months = String.valueOf(month);
-        //String days = String.valueOf(day);
         String ymds = year + "/" + month + "/" + day; //yyyy mm dd の形に再構築
         binding.day.setText(ymds);
-        //textViewh = findViewById(R.id.text_view);
-        //textViewm = findViewById(R.id.pratext);
-        //schedule = findViewById(R.id.editschedule);
 
-        binding.buttonOk.setOnClickListener(view -> { //決定ボタンをクリックしたらDataStoreに入力された文字を保存
-            var intent = new Intent(this, MainActivity.class);
+        binding.buttonOk.setOnClickListener(view -> {    //決定ボタンをクリックしたらDataStoreに入力された文字を保存
+            var intent = new Intent(this, MainActivity2.class);
 
             var hour = binding.textViewh.getText().toString();
             var minute = binding.textViewm.getText().toString();
             var schedule = binding.editschedule.getText().toString();
-            String time = hour + ":" + minute;
-            prefDataStore.setString("time1", time);
-            prefDataStore.setString("naiyou1", schedule);
+            //String time = hour + ":" + minute;
 
             setAlarm(); //アラームのセット
 
             prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
-            //String ymdr = String.valueOf(prefDataStore.getString("day"));
-            //String deslat = String.valueOf(prefDataStore.getString("lat"));
-            //String deslog = String.valueOf(prefDataStore.getString("log"));
-
-            String number = Integer.toString(plann);
-            //String number = String.valueOf(plann);
-            String ymdn = ymdr + number; //yyyymmdd(n)
-            hmpdd = hour + minute + "-" + schedule; //+ "-" + deslat +"-" + deslog; //hhmm-plan-deslat-deslog
-            prefDataStore.getString(ymdr).ifPresent(datas -> plann = Integer.parseInt(datas.toString()));
-            //prefDataStore.setString(ymdr, String.valueOf(plann)); //yyyymmddキー
-            prefDataStore.getString(ymdn).ifPresent(datas -> hmpdd = datas.toString());
-            //prefDataStore.setString(ymdn, String.valueOf(hmpdd));//yyyymmdd(n)キー
-
 
             plann += 1;
+            String number = Integer.toString(plann);
+            String ymdn = ymdr + number;   //yyyymmdd(n)
+            hmpdd = hour + minute + "-" + schedule;
+            //datastoreに格納
+            prefDataStore.setString(ymd,number);    //hhmm-plan-deslat-deslog
+            prefDataStore.setString(ymdn,hmpdd);    //yyyymmdd(n)キー
 
             startActivity(intent); //mainに移動
         });
-
-
 
         binding.buttonNg.setOnClickListener(view -> { //戻るボタンの動作
             var intent2 = new Intent(this, MainActivity2.class); //main2に移動
@@ -138,14 +96,25 @@ public class MainActivity3 extends AppCompatActivity {
         binding.buttonDest.setOnClickListener(view -> { //目的地ボタンの動作
             var intent3 = new Intent(this, MainActivity4.class); //main4へ移動
 
+            var hour = binding.textViewh.getText().toString();
+            var minute = binding.textViewm.getText().toString();
+            var schedule = binding.editschedule.getText().toString();
+            //String time = hour + ":" + minute;
+
+            setAlarm(); //アラームのセット
+
+            prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
+
             plann += 1;
+            String number = Integer.toString(plann);
+            String ymdn = ymdr + number;   //yyyymmdd(n)
+            hmpdd = hour + minute + "-" + schedule;
+            //datastoreに格納
+            prefDataStore.setString(ymd,number);    //hhmm-plan-deslat-deslog
+            prefDataStore.setString(ymdn,hmpdd);    //yyyymmdd(n)キー
+
             startActivity(intent3);
         });
-
-        //setContentView(R.layout.activity_main);
-
-        //Spinner spinnerh = findViewById(R.id.spinnerh);
-        //Spinner spinnerm = findViewById(R.id.spinnerm);
 
         // ArrayAdapter
         ArrayAdapter<String> adapter  //spinner1,2の設定
