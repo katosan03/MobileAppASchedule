@@ -121,22 +121,24 @@ public class MainActivity3 extends AppCompatActivity {
         binding.buttonDest.setOnClickListener(view -> { //目的地ボタンの動作
             var intent3 = new Intent(this, MainActivity4.class); //main4へ移動
 
-            var hour = binding.textViewh.getText().toString();
-            var minute = binding.textViewm.getText().toString();
+            int hour = Integer.parseInt(binding.textViewh.getText().toString());
+            int minute = Integer.parseInt(binding.textViewm.getText().toString());
+            shour = String.format("%02d",hour);
+            sminute = String.format("%02d",minute);
             var schedule = binding.editschedule.getText().toString();
-            //String time = hour + ":" + minute;
-
-            setAlarm(); //アラームのセット
 
             prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
 
             plann += 1;
             String number = Integer.toString(plann);
             String ymdn = ymdr + number;   //yyyymmdd(n)
-            hmpdd = hour + minute + "-" + schedule;
+            hmpdd = shour + sminute + "-" + schedule;
             //datastoreに格納
             prefDataStore.setString(ymd, number);    //hhmm-plan-deslat-deslog
             prefDataStore.setString(ymdn, hmpdd);    //yyyymmdd(n)キー
+
+            //permissionの許可-アラームのセット
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
 
             startActivity(intent3);
         });
