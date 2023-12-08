@@ -147,7 +147,7 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
                         Toast.makeText(getApplicationContext(), "目的地付近にいないようです。急げばきっと間に合いますよ!", Toast.LENGTH_LONG).show();
                     }
                 }
-            }, 2000, 10000);      //----NOTICE!-------1分ごとに登録した予定と近い時間がないか確認
+            }, 2000, 1000000);      //----NOTICE!-------1分ごとに登録した予定と近い時間がないか確認
         }
         //MainActivityに遷移
         var intent = new Intent(this, MainActivity.class);
