@@ -8,6 +8,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,7 +39,6 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
     private String underSetting;
     private String day;
     private String kosuu;
-
 
 
     @Override
@@ -109,6 +109,8 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
                 deslog = point.longitude;
                 //ポインターを設置
                 mMarker.setPosition(point);
+                //ボタンの表示
+                binding.button5.setVisibility(View.VISIBLE);
 
                 binding.button5.setOnClickListener(view -> {
                     //目的地をdataStoreに格納

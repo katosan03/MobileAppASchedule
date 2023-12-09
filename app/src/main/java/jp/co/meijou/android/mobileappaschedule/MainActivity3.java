@@ -4,12 +4,19 @@ package jp.co.meijou.android.mobileappaschedule;
 
 import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.app.Activity;
 
 import android.annotation.SuppressLint;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,15 +30,21 @@ import android.widget.TextView;
 import android.widget.Switch;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import java.util.Calendar;
 
 import android.content.Intent;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Optional;
+import java.util.TimeZone;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain3Binding;
@@ -42,8 +55,17 @@ public class MainActivity3 extends AppCompatActivity {
     private String ymd;
     private String ymdr;
     private String hmpdd;
+    private String year;
+    private String month;
+    private String day;
+    private String shour;
+    private String sminute;
+
     private final String[] hour = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"}; //時の配列
     private final String[] minute = {"00", "10", "20", "30", "40", "50"}; //分の配列
+
+    private final String CHANNEL_ID = "default";
+    private AlarmManager am;
 
     int plann = 0; //予定の個数
 
@@ -54,9 +76,9 @@ public class MainActivity3 extends AppCompatActivity {
         prefDataStore = prefDataStore.getInstance(this);
 
         prefDataStore.getString("day").ifPresent(datas -> ymd = datas.toString());
-        String year = ymd.substring(0, 4);
-        String month = ymd.substring(4, 6);
-        String day = ymd.substring(6, 8);
+        year = ymd.substring(0, 4);
+        month = ymd.substring(4, 6);
+        day = ymd.substring(6, 8);
 
         prefDataStore.getString(ymd).ifPresent(plans -> plann = Integer.parseInt(plans));  //今までに登録のあるその日（day）予定の個数
 
@@ -66,22 +88,24 @@ public class MainActivity3 extends AppCompatActivity {
         binding.buttonOk.setOnClickListener(view -> {    //決定ボタンをクリックしたらDataStoreに入力された文字を保存
             var intent = new Intent(this, MainActivity2.class);
 
-            var hour = binding.textViewh.getText().toString();
-            var minute = binding.textViewm.getText().toString();
+            int hour = Integer.parseInt(binding.textViewh.getText().toString());
+            int minute = Integer.parseInt(binding.textViewm.getText().toString());
+            shour = String.format("%02d",hour);
+            sminute = String.format("%02d",minute);
             var schedule = binding.editschedule.getText().toString();
             //String time = hour + ":" + minute;
-
-            setAlarm(); //アラームのセット
-
             prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
 
             plann += 1;
             String number = Integer.toString(plann);
             String ymdn = ymdr + number;   //yyyymmdd(n)
-            hmpdd = hour + minute + "-" + schedule;
+            hmpdd = shour + sminute + "-" + schedule;
             //datastoreに格納
-            prefDataStore.setString(ymd,number);    //hhmm-plan-deslat-deslog
-            prefDataStore.setString(ymdn,hmpdd);    //yyyymmdd(n)キー
+            prefDataStore.setString(ymd, number);    //hhmm-plan-deslat-deslog
+            prefDataStore.setString(ymdn, hmpdd);    //yyyymmdd(n)キー
+
+            //permissionの許可-アラームのセット
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
 
             startActivity(intent); //mainに移動
         });
@@ -96,22 +120,24 @@ public class MainActivity3 extends AppCompatActivity {
         binding.buttonDest.setOnClickListener(view -> { //目的地ボタンの動作
             var intent3 = new Intent(this, MainActivity4.class); //main4へ移動
 
-            var hour = binding.textViewh.getText().toString();
-            var minute = binding.textViewm.getText().toString();
+            int hour = Integer.parseInt(binding.textViewh.getText().toString());
+            int minute = Integer.parseInt(binding.textViewm.getText().toString());
+            shour = String.format("%02d",hour);
+            sminute = String.format("%02d",minute);
             var schedule = binding.editschedule.getText().toString();
-            //String time = hour + ":" + minute;
-
-            setAlarm(); //アラームのセット
 
             prefDataStore.getString("day").ifPresent(datas -> ymdr = datas.toString());
 
             plann += 1;
             String number = Integer.toString(plann);
             String ymdn = ymdr + number;   //yyyymmdd(n)
-            hmpdd = hour + minute + "-" + schedule;
+            hmpdd = shour + sminute + "-" + schedule;
             //datastoreに格納
-            prefDataStore.setString(ymd,number);    //hhmm-plan-deslat-deslog
-            prefDataStore.setString(ymdn,hmpdd);    //yyyymmdd(n)キー
+            prefDataStore.setString(ymd, number);    //hhmm-plan-deslat-deslog
+            prefDataStore.setString(ymdn, hmpdd);    //yyyymmdd(n)キー
+
+            //permissionの許可-アラームのセット
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
 
             startActivity(intent3);
         });
@@ -165,8 +191,6 @@ public class MainActivity3 extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch sw1 = findViewById(R.id.switch1); //switch1の設定
 
-
-        //sw1.setOnCheckedChangeListener((buttonView, isChecked) -> {
         binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //PMなら12を足したあたいを表示
@@ -197,25 +221,76 @@ public class MainActivity3 extends AppCompatActivity {
 
     }
 
+    private void setAlarm() { //アラームの設定の中身
+        createNotificationChannel();
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Tokyo");
+        Calendar calendar = Calendar.getInstance(timeZone);
+        calendar.setTimeInMillis(System.currentTimeMillis());
 
-    private void setAlarm(){ //アラームの設定の中身
-        Calendar calendar = Calendar.getInstance();
         String zikoku = (String) binding.textViewh.getText();
-
         int hour = Integer.parseInt(zikoku);
         String hun = (String) binding.textViewm.getText();
-
         int minute = Integer.parseInt(hun);
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
 
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         // アラームを設定するIntentを作成
         Intent intent = new Intent(this, AlarmActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
-        // アラームを設定
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-    }
+        intent.putExtra("message", hmpdd);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        //カレンダーにセット
+        calendar.set(Calendar.YEAR, Integer.parseInt(year));
+        calendar.set(Calendar.MONTH, Integer.parseInt(month));
+        calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0)  ;              // 任意の秒を設定
+        var triggerTime = calendar.getTimeInMillis();
+
+        // アラームをセットする
+        am = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        if (am != null) {
+            am.setExact(AlarmManager.RTC_WAKEUP, triggerTime , pendingIntent);
+
+            // トーストで設定されたことをを表示
+            Toast.makeText(getApplicationContext(),
+                    "アラームを設定しました", Toast.LENGTH_SHORT).show();
+
+            Log.d("debug", "start");
+        }
+    }
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Schedule";
+            String description = hmpdd;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    private final ActivityResultLauncher<String>
+            requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> {
+                if (isGranted) {
+                    setAlarm();
+                }
+                //permissionが許可されなかった場合の挙動
+                else {
+                    Toast.makeText(getApplicationContext(), "通知を受けるには設定から許可してください", Toast.LENGTH_LONG).show();
+                }
+            });
 
 }
+
+/*
+https://tech.amefure.com/android-notify-time-specification
+https://akira-watson.com/android/alarm-notificationmanager.html
+https://developer.android.com/training/notify-user/build-notification?hl=ja#java
+ */

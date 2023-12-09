@@ -81,7 +81,9 @@ public class MainActivity2 extends AppCompatActivity {
                 String[] naiyou = arr[0].split("-");
                 String jikoku = arr[0];
                 data.jikanTitle = jikoku.substring(0, 2) + "："+ jikoku.substring(2, 4);
-                data.naiyouContents = naiyou[1];
+                if(naiyou[1] != null){
+                    data.naiyouContents = naiyou[1];
+                }
             }
 
             dataSet.add(data);
