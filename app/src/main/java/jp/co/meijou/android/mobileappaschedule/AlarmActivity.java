@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -19,8 +20,10 @@ import androidx.core.app.NotificationManagerCompat;
 
 public class AlarmActivity extends BroadcastReceiver {
     private String receivedData;
+    private String message;
     private String channelId = "default";
     private int NOTIFY_ID = 0;
+    private PrefDataStore prefDataStore;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,10 +34,30 @@ public class AlarmActivity extends BroadcastReceiver {
         receivedData = intent.getStringExtra("message");
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        prefDataStore = prefDataStore.getInstance(context);
+        GetPlace gp = new GetPlace(prefDataStore);
+        int fGp = gp.hantei();
+
+        String yotei = "";
+        if(receivedData.length() != 5){
+            yotei = receivedData.substring(5);
+        }
+        if (fGp == 0) {
+            message = yotei + "のお時間です!!";
+        }
+        //予定目的地付近にいる場合
+        else if (fGp == 1) {
+            message = yotei + "の目的地付近にいます";
+        }
+        //予定目的地の遠くにいる場合
+        else {
+            message = yotei + "目的地付近にいないようです。急げばきっと間に合いますよ!";
+        }
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("Schedule")
-                .setContentText(receivedData)
+                .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);

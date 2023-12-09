@@ -39,14 +39,14 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
             isGranted -> {
                 if (isGranted) {
                     locationStart();
-                    //設定した予定と近い時間のものを確認
-                    checkScheduleStart(prefDataStore);
+                    //MainActivityに遷移
+                    pagePass();
                 }
                 //permissionが許可されなかった場合の挙動
                 else {
                     Toast.makeText(getApplicationContext(), "目的地を設定するには位置情報を許可してください", Toast.LENGTH_LONG).show();
-                    //設定した予定と近い時間のものを確認
-                    checkScheduleStart(prefDataStore);
+                    //MainActivityに遷移
+                    pagePass();
                 }
             });
 
@@ -68,7 +68,7 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
         }
         else{
             locationStart();
-            checkScheduleStart(prefDataStore);
+            pagePass();
         }
     }
 
@@ -81,13 +81,13 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
 
         if (locationManager != null && locationManager.isProviderEnabled(
                 LocationManager.GPS_PROVIDER)) {
-            Log.d("debug", "location manager Enabled");
+            //Log.d("debug", "location manager Enabled");
         } else {
             // GPSを設定するように促す
             Intent settingsIntent =
                     new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(settingsIntent);
-            Log.d("debug", "not gpsEnable, startActivity");
+            //Log.d("debug", "not gpsEnable, startActivity");
         }
 
         if (ContextCompat.checkSelfPermission(this,
@@ -109,46 +109,19 @@ public class MainActivity0 extends AppCompatActivity implements LocationListener
         // 緯度の登録
         Double lat = location.getLatitude();
         prefDataStore.setString("lat", lat.toString());
-
         // 経度の登録
         Double log = location.getLongitude();
         prefDataStore.setString("log", log.toString());
-
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
-
     @Override
     public void onProviderDisabled(String provider) {
-
     }
 
-    public void checkScheduleStart(PrefDataStore prefDataStore){
-        //一定時間ごとに予定時間に近い予定があるかどうか確認
-        if(flag == 0) {
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    GetPlace gp = new GetPlace(prefDataStore);
-                    int fGp = gp.hantei();
-                    if (fGp == 0) {
-                        Log.d("timeTest","not applicable");
-                    }
-                    //予定目的地付近にいる場合
-                    else if (fGp == 1) {
-                        Toast.makeText(getApplicationContext(), "目的地付近にいます", Toast.LENGTH_LONG).show();
-                    }
-                    //予定目的地の遠くにいる場合
-                    else {
-                        Toast.makeText(getApplicationContext(), "目的地付近にいないようです。急げばきっと間に合いますよ!", Toast.LENGTH_LONG).show();
-                    }
-                }
-            }, 2000, 1000000);      //----NOTICE!-------1分ごとに登録した予定と近い時間がないか確認
-        }
+    private void pagePass(){
         //MainActivityに遷移
         var intent = new Intent(this, MainActivity.class);
         startActivity(intent);
