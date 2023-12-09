@@ -44,6 +44,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.Optional;
+import java.util.TimeZone;
 
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain3Binding;
@@ -65,8 +66,6 @@ public class MainActivity3 extends AppCompatActivity {
 
     private final String CHANNEL_ID = "default";
     private AlarmManager am;
-    private PendingIntent pending;
-    private final int requestCode = 1;
 
     int plann = 0; //予定の個数
 
@@ -192,8 +191,6 @@ public class MainActivity3 extends AppCompatActivity {
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch sw1 = findViewById(R.id.switch1); //switch1の設定
 
-
-        //sw1.setOnCheckedChangeListener((buttonView, isChecked) -> {
         binding.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) { //PMなら12を足したあたいを表示
@@ -224,11 +221,10 @@ public class MainActivity3 extends AppCompatActivity {
 
     }
 
-
-
     private void setAlarm() { //アラームの設定の中身
         createNotificationChannel();
-        Calendar calendar = Calendar.getInstance();
+        TimeZone timeZone = TimeZone.getTimeZone("Asia/Tokyo");
+        Calendar calendar = Calendar.getInstance(timeZone);
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         String zikoku = (String) binding.textViewh.getText();
@@ -245,18 +241,20 @@ public class MainActivity3 extends AppCompatActivity {
         calendar.set(Calendar.YEAR, Integer.parseInt(year));
         calendar.set(Calendar.MONTH, Integer.parseInt(month));
         calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(day));
-        calendar.set(Calendar.HOUR_OF_DAY,Integer.parseInt(shour));
-        calendar.set(Calendar.MINUTE, Integer.parseInt(sminute));
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        calendar.set(Calendar.SECOND, 0)  ;              // 任意の秒を設定
+        var triggerTime = calendar.getTimeInMillis();
 
         // アラームをセットする
         am = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         if (am != null) {
-            am.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending);
+            am.setExact(AlarmManager.RTC_WAKEUP, triggerTime , pendingIntent);
 
             // トーストで設定されたことをを表示
             Toast.makeText(getApplicationContext(),
-                    "alarm start", Toast.LENGTH_SHORT).show();
+                    "アラームを設定しました", Toast.LENGTH_SHORT).show();
 
             Log.d("debug", "start");
         }
@@ -265,9 +263,9 @@ public class MainActivity3 extends AppCompatActivity {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = "MobileApp";
+            CharSequence name = "Schedule";
             String description = hmpdd;
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             // Register the channel with the system; you can't change the importance
@@ -285,7 +283,7 @@ public class MainActivity3 extends AppCompatActivity {
                 }
                 //permissionが許可されなかった場合の挙動
                 else {
-                    Toast.makeText(getApplicationContext(), "目的地を設定するには位置情報を許可してください", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "通知を受けるには設定から許可してください", Toast.LENGTH_LONG).show();
                 }
             });
 
