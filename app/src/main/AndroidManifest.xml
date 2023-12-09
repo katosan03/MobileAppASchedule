@@ -62,7 +62,9 @@
             android:exported="true" />
 
         <receiver android:name=".AlarmActivity"
-            android:process=":remote"/>
+            android:process=":remote"
+            android:enabled="true"
+            android:exported="false"/>
 
     </application>
 

@@ -112,9 +112,7 @@ public class MainActivity3 extends AppCompatActivity {
 
         binding.buttonNg.setOnClickListener(view -> { //戻るボタンの動作
             var intent2 = new Intent(this, MainActivity2.class); //main2に移動
-
             startActivity(intent2);
-
         });
 
         binding.buttonDest.setOnClickListener(view -> { //目的地ボタンの動作
@@ -223,10 +221,6 @@ public class MainActivity3 extends AppCompatActivity {
 
     private void setAlarm() { //アラームの設定の中身
         createNotificationChannel();
-        TimeZone timeZone = TimeZone.getTimeZone("Asia/Tokyo");
-        Calendar calendar = Calendar.getInstance(timeZone);
-        calendar.setTimeInMillis(System.currentTimeMillis());
-
         String zikoku = (String) binding.textViewh.getText();
         int hour = Integer.parseInt(zikoku);
         String hun = (String) binding.textViewm.getText();
@@ -237,6 +231,10 @@ public class MainActivity3 extends AppCompatActivity {
         intent.putExtra("message", hmpdd);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE);
 
+        //カレンダーの作成
+        Calendar calendar = Calendar.getInstance();     //現在時間が取得される
+        //指定時間をセット
+        calendar.setTimeInMillis(System.currentTimeMillis());
         //カレンダーにセット
         calendar.set(Calendar.YEAR, Integer.parseInt(year));
         calendar.set(Calendar.MONTH, Integer.parseInt(month));
@@ -244,14 +242,12 @@ public class MainActivity3 extends AppCompatActivity {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0)  ;              // 任意の秒を設定
-        var triggerTime = calendar.getTimeInMillis();
 
         // アラームをセットする
         am = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         if (am != null) {
-            am.setExact(AlarmManager.RTC_WAKEUP, triggerTime , pendingIntent);
-
+            am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             // トーストで設定されたことをを表示
             Toast.makeText(getApplicationContext(),
                     "アラームを設定しました", Toast.LENGTH_SHORT).show();
@@ -286,11 +282,13 @@ public class MainActivity3 extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "通知を受けるには設定から許可してください", Toast.LENGTH_LONG).show();
                 }
             });
-
 }
 
 /*
+任意の時間に通知を発行（kotlin）
 https://tech.amefure.com/android-notify-time-specification
+通知の時間指定
 https://akira-watson.com/android/alarm-notificationmanager.html
+notification
 https://developer.android.com/training/notify-user/build-notification?hl=ja#java
  */

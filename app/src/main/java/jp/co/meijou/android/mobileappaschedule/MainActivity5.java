@@ -104,15 +104,19 @@ public class MainActivity5 extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onMapClick(LatLng point) {
                 // TODO Auto-generated method stub
-                Double deslat,deslog;
-                deslat = point.latitude;
-                deslog = point.longitude;
                 //ポインターを設置
                 mMarker.setPosition(point);
+                // タッチ地点と目的地との最短距離の計算
+                float[] results = new float[1];
+                Location.distanceBetween(point.latitude, point.longitude, mLocation.latitude, mLocation.longitude, results);
+                Toast.makeText(getApplicationContext(), "ここからの距離：" + ( (Float)(results[0]/1000) ).toString() + "Km", Toast.LENGTH_SHORT).show();
                 //ボタンの表示
                 binding.button5.setVisibility(View.VISIBLE);
 
                 binding.button5.setOnClickListener(view -> {
+                    Double deslat, deslog;
+                    deslat = point.latitude;
+                    deslog = point.longitude;
                     //目的地をdataStoreに格納
                     underSetting = underSetting + "-" + deslat.toString() + "-" + deslog.toString();
                     prefDataStore.setString(name, underSetting);
