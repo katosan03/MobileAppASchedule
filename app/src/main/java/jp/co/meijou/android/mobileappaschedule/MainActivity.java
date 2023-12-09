@@ -2,6 +2,8 @@ package jp.co.meijou.android.mobileappaschedule;
 
 //日付を選択するページ
 
+import static java.sql.Types.NULL;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -42,11 +44,9 @@ public class MainActivity extends AppCompatActivity {
     private String Year;
     private String Month;
     private String DayOfMonth;
-    private String today;
-
+    private List<MainAdapter> dataList;
+    private String naiyoo;
     private int kosuu;
-
-    private int Day;
 
     /*
     private final ActivityResultLauncher<Intent> getActivityResult = registerForActivityResult(
@@ -70,9 +70,15 @@ public class MainActivity extends AppCompatActivity {
     );
 
      */
-    //現在の日付を取得する
+    //現在の日付を取得する(テキスト用)
     public String getNowDate(){
         final DateFormat df = new SimpleDateFormat("yyyy年MM月dd日");
+        final Date date = new Date(System.currentTimeMillis());
+        return df.format(date);
+    }
+    //現在の日付を取得する(キー取得用)
+    public String getNowDateKey(){
+        final DateFormat df = new SimpleDateFormat("yyyyMMdd");
         final Date date = new Date(System.currentTimeMillis());
         return df.format(date);
     }
@@ -82,10 +88,33 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //今日の日付を表示する
+        binding.todayText.setText(getNowDate());
 
-        //CalendarViewインスタント生成
-        //CalendarView calendar = findViewById(R.id.calendarView);
-        binding.textView.setText(getNowDate());
+        String dayKey = getNowDateKey();
+        Log.d("dayKey", dayKey);
+
+        //prefDataStore.getString(dayKey).ifPresent(kosu -> kosuu = Integer.parseInt(kosu));
+        int i = 1;
+        if(kosuu != 0){
+
+            while(i <= kosuu && i <= 3){
+                String num = Integer.toString(i);
+                prefDataStore.getString(dayKey + num).ifPresent(naiyo -> naiyoo = naiyo);
+                Log.d("naiyo", naiyoo);
+                String[] datas = naiyoo.split("-");
+                String jikoku = datas[0];
+
+                String context = jikoku.substring(0, 2) + "："+ jikoku.substring(2, 4) + "\n" + datas[1];
+                if(i == 1) binding.plan1.setText(context);
+                else if(i == 2) binding.plan2.setText(context);
+                else binding.plan3.setText(context);
+                i++;
+            }
+        }
+
+
+        //dataStore.getString("time1").ifPresent(time -> binding.);
 
         //日付を選択した時のリスナー
         binding.calendarView.setOnDateChangeListener(
@@ -115,10 +144,6 @@ public class MainActivity extends AppCompatActivity {
             var intent = new Intent(this, MainActivity2.class);
             startActivity(intent);
 
-
-
-
-            //intent.putExtra("text", binding.button1.getText().toString());
 
 
 
