@@ -20,12 +20,12 @@ import androidx.core.app.NotificationManagerCompat;
 public class AlarmActivity extends BroadcastReceiver {
     private String receivedData;
     private String channelId = "default";
-    private int NOTIFY_ID = 1;
+    private int NOTIFY_ID = 0;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         // アラームが発動したときの処理を記述
-        Toast.makeText(context, "時間になりました！！", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "時間になりました！！", Toast.LENGTH_SHORT).show();
 
         // ブロードキャストを受け取る
         receivedData = intent.getStringExtra("message");

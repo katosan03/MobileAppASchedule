@@ -36,7 +36,6 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
     private ActivityMain4Binding binding;
     private PrefDataStore prefDataStore;
 
-
     //permissionが許可されているかの確認
     private final ActivityResultLauncher<String>
             requestPermissionLauncher = registerForActivityResult(
@@ -48,7 +47,7 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
                     }
                     //permissionが許可されなかった場合の挙動
                     else {
-                        Toast.makeText(getApplicationContext(), "目的地を設定するには位置情報を許可してください", Toast.LENGTH_LONG).show();
+                        binding.textViewLoca.setText("目的地を設定するには位置情報を許可してください");
                         //位置情報が許可されていない場合，戻るボタンの用意
                         binding.button4to3.setVisibility(View.VISIBLE);
                     }
@@ -70,9 +69,9 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
             requestPermissionLauncher.launch(
                     Manifest.permission.ACCESS_FINE_LOCATION);
 
-            //戻るボタンを押した場合（MainActivity3に戻る）
+            //戻るボタンを押した場合（MainActivity2に戻る）
             binding.button4to3.setOnClickListener(view ->{
-                var intent = new Intent(this, MainActivity3.class);
+                var intent = new Intent(this, MainActivity2.class);
                 startActivity(intent);
             });
         }
@@ -117,36 +116,26 @@ public class MainActivity4 extends AppCompatActivity implements LocationListener
         // 緯度の登録
         Double lat = location.getLatitude();
         prefDataStore.setString("lat", lat.toString());
-
         // 経度の登録
         Double log = location.getLongitude();
         prefDataStore.setString("log", log.toString());
 
         var intent = new Intent(this, MainActivity5.class);
         startActivity(intent);
-
-
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
     }
-
     @Override
     public void onProviderDisabled(String provider) {
 
     }
-
 }
 
 /*
-参考
-
 位置情報を取得する
 https://akira-watson.com/android/gps.html
 GoogleMapのAPI使うための設定
 https://developers.google.com/maps/documentation/android-sdk/start?hl=ja
-タイマー
-https://android-note.open-memo.net/sub/event__schedule_task_with_timer.html
  */
