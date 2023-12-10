@@ -2,20 +2,16 @@ package jp.co.meijou.android.mobileappaschedule;
 
 //予定を書き足すページ
 
-import static com.google.android.gms.common.internal.safeparcel.SafeParcelable.NULL;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
-import android.app.Activity;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,30 +19,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Switch;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import java.util.Calendar;
 
 import android.content.Intent;
 import android.widget.Toast;
-
-import com.google.android.gms.maps.model.LatLng;
-
-import java.util.Optional;
-import java.util.TimeZone;
-
-import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain2Binding;
 import jp.co.meijou.android.mobileappaschedule.databinding.ActivityMain3Binding;
 
 public class MainActivity3 extends AppCompatActivity {
@@ -249,8 +231,7 @@ public class MainActivity3 extends AppCompatActivity {
         if (am != null) {
             am.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
             // トーストで設定されたことをを表示
-            Toast.makeText(getApplicationContext(),
-                    "アラームを設定しました", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"アラームを設定しました", Toast.LENGTH_SHORT).show();
 
             Log.d("debug", "start");
         }
